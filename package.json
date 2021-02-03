@@ -28,6 +28,7 @@
     "write-file-webpack-plugin": "4.5.1"
   },
   "dependencies": {
+    "cheerio": "^1.0.0-rc.5",
     "lodash": "^4.17.20",
     "node-fetch": "^2.6.1",
     "prettier": "^2.2.1"

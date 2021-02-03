@@ -1,3 +1,5 @@
-const app = () => {}
+const app = () => {
+  console.log(' world!')
+}
 
 export default app

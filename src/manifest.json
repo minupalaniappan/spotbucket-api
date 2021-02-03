@@ -1,13 +1,13 @@
 {
-  "manifest_version": 1,
-  "version": "1.0",
+  "manifest_version": 2,
+  "version": "2.0",
   "name": "hoopcam",
   "description": "",
   "content_scripts": [
     {
       "run_at": "document_idle",
       "js": ["inject.bundle.js"],
-      "matches": ["*"]
+      "matches": ["<all_urls>"]
     }
   ],
   "web_accessible_resources": ["index.bundle.js"],
