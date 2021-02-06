@@ -1,4 +1,3 @@
-const { flatten } = require('lodash')
 const {
   fetchPlayByPlayForGames,
   fetchPlayerProfile,
