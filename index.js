@@ -16,8 +16,6 @@ app.get('/', async (req, res) => {
 
   const payload = await run(name, params)
 
-  console.log(req)
-
   try {
     if (!payload) {
       res.status(400).json(payload)
