@@ -32,6 +32,4 @@ app.get('/', async (req, res) => {
   }
 })
 
-app.listen(port, () => {
-  console.log(`Listening at http://localhost:${port}`)
-})
+app.listen(process.env.PORT || 5000)
