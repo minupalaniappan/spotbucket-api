@@ -10,10 +10,16 @@ app.get('/', async (req, res) => {
 
   const payload = await run(name)
 
-  if (!payload) {
-    res.status(400).json(payload)
-  } else {
-    res.status(200).json(payload)
+  try {
+    if (!payload) {
+      res.status(400).json(payload)
+    } else {
+      res.status(200).json(payload)
+    }
+  } catch (e) {
+    res.status(500).json({
+      error: JSON.stringify(e)
+    })
   }
 })
 
