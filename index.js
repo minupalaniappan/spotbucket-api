@@ -11,12 +11,9 @@ app.get('/', async (req, res) => {
   const payload = await run(name)
 
   if (!payload) {
-    res.json(
-      {
-        payload
-      },
-      400
-    )
+    res.status(400).json(payload)
+  } else {
+    res.status(200).json(payload)
   }
 })
 

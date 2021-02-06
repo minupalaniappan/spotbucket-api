@@ -1,5 +1,6 @@
+const { flatten } = require('lodash')
 const {
-  fetchPlayByPlayForGame,
+  fetchPlayByPlayForGames,
   fetchPlayerProfile,
   parsePlayerLastFiveGames,
   parsePlayerPlaysForGame,
@@ -18,15 +19,21 @@ const run = async playerName => {
 
   const lastFiveGames = parsePlayerLastFiveGames(playerProfile)
 
-  console.log(lastFiveGames)
+  const playByPlaysForGames = await fetchPlayByPlayForGames(lastFiveGames)
 
-  const playByPlaysForGames = await Promise.all(
-    lastFiveGames.map(({ gameId }) => fetchPlayByPlayForGame(gameId))
+  const plays = playByPlaysForGames.map(e =>
+    parsePlayerPlaysForGame(e, playerName)
   )
 
-  const getPlaysWithPlayer = playByPlaysForGames.map(e =>
-    parsePlayerPlaysForGame(e)
-  )
+  const { image: profile_image, team, ...stats } = playerStats
+
+  return {
+    profile_image,
+    playerName,
+    team,
+    stats,
+    plays: flatten(plays)
+  }
 }
 
 module.exports = run
