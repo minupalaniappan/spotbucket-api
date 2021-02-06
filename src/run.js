@@ -2,28 +2,34 @@ const { flatten } = require('lodash')
 const {
   fetchPlayByPlayForGames,
   fetchPlayerProfile,
-  parsePlayerLastFiveGames,
+  parsePlayerLastGame,
   parsePlayerPlaysForGame,
-  parsePlayerStats
+  parsePlayerStats,
+  fetchVideosForPlays
 } = require('./api')
 
 const players = require('./players')
+const arrayPaginate = require('array-paginate')
 
-const run = async playerName => {
+const run = async (playerName, params) => {
   if (!players[playerName]) {
     return null
   }
 
+  const { game, perPage, page } = params
+
   const playerProfile = await fetchPlayerProfile(playerName)
   const playerStats = parsePlayerStats(playerProfile)
 
-  const lastFiveGames = parsePlayerLastFiveGames(playerProfile)
+  const lastGame = parsePlayerLastGame(playerProfile, game)
 
-  const playByPlaysForGames = await fetchPlayByPlayForGames(lastFiveGames)
+  const playByPlaysForGame = await fetchPlayByPlayForGames(lastGame)
 
-  const plays = playByPlaysForGames.map(e =>
-    parsePlayerPlaysForGame(e, playerName)
-  )
+  let totalPlays = parsePlayerPlaysForGame(playByPlaysForGame, playerName)
+
+  const pagedPlays = arrayPaginate(totalPlays, page, perPage)
+
+  const plays = await fetchVideosForPlays(pagedPlays.docs)
 
   const { image: profile_image, team, ...stats } = playerStats
 
@@ -32,7 +38,10 @@ const run = async playerName => {
     playerName,
     team,
     stats,
-    plays: flatten(plays)
+    plays,
+    totalPlays: totalPlays.length,
+    totalPages: pagedPlays.totalPages,
+    hasNextPage: pagedPlays.hasNextPage
   }
 }
 

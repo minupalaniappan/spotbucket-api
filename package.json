@@ -10,12 +10,12 @@
   "license": "ISC",
   "devDependencies": {},
   "dependencies": {
+    "array-paginate": "^1.0.2",
     "cheerio": "^1.0.0-rc.5",
     "express": "^4.17.1",
     "lodash": "^4.17.20",
     "node-fetch": "^2.6.1",
     "nodemon": "^2.0.7",
-    "prettier": "^2.2.1",
-    "qs": "^6.9.6"
+    "prettier": "^2.2.1"
   }
 }

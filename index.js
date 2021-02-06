@@ -5,16 +5,25 @@ const port = 3000
 
 app.get('/', async (req, res) => {
   const {
-    query: { name }
+    query: { name, game = 1, perPage = 5, page = 1 }
   } = req
 
-  const payload = await run(name)
+  const params = {
+    game,
+    perPage,
+    page
+  }
+
+  const payload = await run(name, params)
 
   try {
     if (!payload) {
       res.status(400).json(payload)
     } else {
-      res.status(200).json(payload)
+      res.status(200).json({
+        ...payload,
+        params
+      })
     }
   } catch (e) {
     res.status(500).json({

@@ -1,7 +1,6 @@
 const fetch = require('node-fetch')
 const players = require('./players')
 const cheerio = require('cheerio')
-const qs = require('qs')
 
 const fetchPlayerProfile = async playerName => {
   const html = await fetch(players[playerName])
@@ -11,19 +10,58 @@ const fetchPlayerProfile = async playerName => {
   return html
 }
 
-const fetchPlayByPlayForGames = async links => {
-  const htmls = await Promise.all(
-    links.map(l =>
-      fetch(l)
-        .then(d => d.text())
-        .then(e => e)
-    )
-  )
+const fetchPlayByPlayForGames = async link => {
+  const html = await fetch(link)
+    .then(d => d.text())
+    .then(e => e)
 
-  return htmls
+  return html
 }
 
-const fetchVideoForPlay = async (gameId, eventId) => {}
+const fetchVideosForPlays = async actions => {
+  const videos = await Promise.all(
+    actions.map(({ gameId, eventId }) => fetchVideoForPlay(gameId, eventId))
+  )
+
+  return actions.map(a => ({
+    ...a,
+    videoUrl: videos.find(
+      ({ gameId, eventId }) => gameId === a.gameId && eventId === a.eventId
+    )
+  }))
+}
+
+const fetchVideoForPlay = async (gameId, eventId) => {
+  const json = await fetch(
+    `https://stats.nba.com/stats/videoeventsasset?GameEventID=${eventId}&GameID=${gameId}`,
+    {
+      headers: {
+        Connection: 'keep-alive',
+        Pragma: 'no-cache',
+        'Cache-Control': 'no-cache',
+        Accept: 'application/json, text/plain, */*',
+        'x-nba-stats-token': 'true',
+        'User-Agent':
+          'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_1_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.96 Safari/537.36',
+        'x-nba-stats-origin': 'stats',
+        Origin: 'https://www.nba.com',
+        'Sec-Fetch-Site': 'same-site',
+        'Sec-Fetch-Mode': 'cors',
+        'Sec-Fetch-Dest': 'empty',
+        Referer: 'https://www.nba.com/',
+        'Accept-Language': 'en-US,en;q=0.9'
+      }
+    }
+  )
+    .then(d => d.json())
+    .then(({ resultSets: { Meta: { videoUrls } } }) => ({
+      gameId,
+      eventId,
+      videoUrl: videoUrls[0]['surl']
+    }))
+
+  return json
+}
 
 const parsePlayerStats = html => {
   const $ = cheerio.load(html)
@@ -40,7 +78,7 @@ const parsePlayerStats = html => {
   }
 }
 
-const parsePlayerLastFiveGames = html => {
+const parsePlayerLastGame = (html, gameNumber) => {
   const $ = cheerio.load(html)
 
   let links = $(
@@ -53,7 +91,7 @@ const parsePlayerLastFiveGames = html => {
     `https://www.nba.com${l}`.replace('box-score', 'play-by-play')
   )
 
-  return links
+  return links[gameNumber - 1]
 }
 
 const parsePlayerPlaysForGame = (html, playerName) => {
@@ -101,6 +139,7 @@ module.exports = {
   fetchPlayByPlayForGames,
   fetchVideoForPlay,
   parsePlayerStats,
-  parsePlayerLastFiveGames,
-  parsePlayerPlaysForGame
+  parsePlayerLastGame,
+  parsePlayerPlaysForGame,
+  fetchVideosForPlays
 }
