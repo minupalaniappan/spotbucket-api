@@ -63,18 +63,23 @@ const fetchVideoForPlay = async (gameId, eventId) => {
   return json
 }
 
-const parsePlayerStats = html => {
+const parsePlayerBio = html => {
   const $ = cheerio.load(html)
 
   return {
     image: $('.PlayerImage_image__1smob.mx-auto').attr('src'),
-    ppg: $($('.PlayerSummary_playerStatValue__3hvQY').get(0)).text().trim(),
-    rpg: $($('.PlayerSummary_playerStatValue__3hvQY').get(1)).text().trim(),
-    apg: $($('.PlayerSummary_playerStatValue__3hvQY').get(2)).text().trim(),
+    team_image: $('.absolute.w-16.min-w-0.mt-5 img').attr('src'),
     team: $('.flex.flex-col.mb-2.text-white > p:first-child')
       .text()
       .split('|')[0]
-      .trim()
+      .trim(),
+    position: $('.flex.flex-col.mb-2.text-white > p:first-child')
+      .text()
+      .split('|')[2]
+      .trim(),
+    ppg: $($('.PlayerSummary_playerStatValue__3hvQY').get(0)).text().trim(),
+    rpg: $($('.PlayerSummary_playerStatValue__3hvQY').get(1)).text().trim(),
+    apg: $($('.PlayerSummary_playerStatValue__3hvQY').get(2)).text().trim()
   }
 }
 
@@ -134,12 +139,18 @@ const parsePlayerPlaysForGame = (html, playerName) => {
   return actions
 }
 
+const fetchTwitterProfile = playerName =>
+  `https://twitter.com/search?q=${encodeURIComponent(
+    playerName
+  )}&src=typed_query`
+
 module.exports = {
   fetchPlayerProfile,
   fetchPlayByPlayForGames,
   fetchVideoForPlay,
-  parsePlayerStats,
+  parsePlayerBio,
   parsePlayerLastGame,
   parsePlayerPlaysForGame,
-  fetchVideosForPlays
+  fetchVideosForPlays,
+  fetchTwitterProfile
 }

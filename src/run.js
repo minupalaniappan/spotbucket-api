@@ -3,8 +3,9 @@ const {
   fetchPlayerProfile,
   parsePlayerLastGame,
   parsePlayerPlaysForGame,
-  parsePlayerStats,
-  fetchVideosForPlays
+  parsePlayerBio,
+  fetchVideosForPlays,
+  fetchTwitterProfile
 } = require('./api')
 
 const players = require('./players')
@@ -18,7 +19,7 @@ const run = async (playerName, params) => {
   const { game, perPage, page } = params
 
   const playerProfile = await fetchPlayerProfile(playerName)
-  const playerStats = parsePlayerStats(playerProfile)
+  const playerBio = parsePlayerBio(playerProfile)
 
   const lastGame = parsePlayerLastGame(playerProfile, game)
 
@@ -30,13 +31,18 @@ const run = async (playerName, params) => {
 
   const plays = await fetchVideosForPlays(pagedPlays.docs)
 
-  const { image: profile_image, team, ...stats } = playerStats
+  const { image: profile_image, team, position, ppg, apg, rpg } = playerBio
+
+  const twitter_profile = fetchTwitterProfile(playerName)
 
   return {
     profile_image,
-    playerName,
+    nba_profile: players[playerName],
+    twitter_profile,
+    player_name: playerName,
+    position,
     team,
-    stats,
+    stats: { ppg, apg, rpg },
     plays,
     totalPlays: totalPlays.length,
     totalPages: pagedPlays.totalPages,
