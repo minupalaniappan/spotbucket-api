@@ -1,7 +1,9 @@
 const express = require('express')
 const run = require('./src/run')
 const app = express()
-const port = 3000
+const cors = require('cors')
+
+app.use(cors())
 
 app.get('/', async (req, res) => {
   const {
