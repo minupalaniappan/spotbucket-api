@@ -57,7 +57,7 @@ const fetchVideoForPlay = async (gameId, eventId) => {
     .then(({ resultSets: { Meta: { videoUrls } } }) => ({
       gameId,
       eventId,
-      videoUrl: videoUrls[0]['surl']
+      videoUrl: videoUrls[0]['murl']
     }))
 
   return json

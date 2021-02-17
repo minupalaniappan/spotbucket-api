@@ -31,7 +31,15 @@ const run = async (playerName, params) => {
 
   const plays = await fetchVideosForPlays(pagedPlays.docs)
 
-  const { image: profile_image, team, position, ppg, apg, rpg } = playerBio
+  const {
+    image: profile_image,
+    team,
+    position,
+    ppg,
+    apg,
+    rpg,
+    team_image
+  } = playerBio
 
   const twitter_profile = fetchTwitterProfile(playerName)
 
@@ -42,6 +50,7 @@ const run = async (playerName, params) => {
     player_name: playerName,
     position,
     team,
+    team_image,
     stats: { ppg, apg, rpg },
     plays,
     totalPlays: totalPlays.length,
