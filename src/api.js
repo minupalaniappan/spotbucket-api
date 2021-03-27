@@ -73,13 +73,14 @@ const parsePlayerBio = html => {
       .text()
       .split('|')[0]
       .trim(),
+    player_number: $('.flex.flex-col.mb-2.text-white > p:first-child')
+      .text()
+      .split('|')[1]
+      .trim()[1],
     position: $('.flex.flex-col.mb-2.text-white > p:first-child')
       .text()
       .split('|')[2]
-      .trim(),
-    ppg: $($('.PlayerSummary_playerStatValue__3hvQY').get(0)).text().trim(),
-    rpg: $($('.PlayerSummary_playerStatValue__3hvQY').get(1)).text().trim(),
-    apg: $($('.PlayerSummary_playerStatValue__3hvQY').get(2)).text().trim()
+      .trim()
   }
 }
 
@@ -96,7 +97,7 @@ const parsePlayerLastGame = (html, gameNumber) => {
     `https://www.nba.com${l}`.replace('box-score', 'play-by-play')
   )
 
-  return links[gameNumber - 1]
+  return links[gameNumber]
 }
 
 const parsePlayerPlaysForGame = (html, playerName) => {

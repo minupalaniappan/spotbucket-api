@@ -35,9 +35,7 @@ const run = async (playerName, params) => {
     image: profile_image,
     team,
     position,
-    ppg,
-    apg,
-    rpg,
+    player_number,
     team_image
   } = playerBio
 
@@ -48,10 +46,10 @@ const run = async (playerName, params) => {
     nba_profile: players[playerName],
     twitter_profile,
     player_name: playerName,
+    player_number,
     position,
     team,
     team_image,
-    stats: { ppg, apg, rpg },
     plays,
     totalPlays: totalPlays.length,
     totalPages: pagedPlays.totalPages,
