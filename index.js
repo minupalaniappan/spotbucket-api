@@ -40,8 +40,6 @@ app.get('/', async (req, res) => {
     page: parseInt(page)
   }
 
-  console.log(params)
-
   const payload = await run(name, params)
 
   try {
