@@ -4,8 +4,7 @@ const {
   parsePlayerLastGame,
   parsePlayerPlaysForGame,
   parsePlayerBio,
-  fetchVideosForPlays,
-  fetchTwitterProfile
+  fetchVideosForPlays
 } = require('./api')
 
 const players = require('./players')
@@ -39,12 +38,9 @@ const run = async (playerName, params) => {
     team_image
   } = playerBio
 
-  const twitter_profile = fetchTwitterProfile(playerName)
-
   return {
     profile_image,
     nba_profile: players[playerName],
-    twitter_profile,
     player_name: playerName,
     player_number,
     position,
