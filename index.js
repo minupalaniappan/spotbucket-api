@@ -7,6 +7,9 @@ const cors = require('cors')
 app.use(cors())
 
 app.get('/stats', async (req, res) => {
+  res.setHeader('Content-Type', 'text/html')
+  res.setHeader('Cache-Control', 's-max-age=1, stale-while-revalidate')
+
   const {
     query: { name }
   } = req
@@ -30,6 +33,9 @@ app.get('/stats', async (req, res) => {
 })
 
 app.get('/', async (req, res) => {
+  res.setHeader('Content-Type', 'text/html')
+  res.setHeader('Cache-Control', 's-max-age=1, stale-while-revalidate')
+
   const {
     query: { name, game = 0, perPage = 5, page = 0 }
   } = req
