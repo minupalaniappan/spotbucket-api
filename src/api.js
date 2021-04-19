@@ -33,6 +33,8 @@ const fetchVideosForPlays = async actions => {
 }
 
 const fetchVideoForPlay = async (gameId, eventId) => {
+  console.log(`Starting for ${gameId} ${eventId}`)
+
   const json = await fetch(
     `https://stats.nba.com/stats/videoeventsasset?GameEventID=${eventId}&GameID=${gameId}`,
     {
@@ -53,11 +55,21 @@ const fetchVideoForPlay = async (gameId, eventId) => {
     }
   )
     .then(d => d.json())
-    .then(({ resultSets: { Meta: { videoUrls } } }) => ({
-      gameId,
-      eventId,
-      videoUrl: videoUrls.length > 0 ? videoUrls[0]['murl'] : ''
-    }))
+    .then(
+      ({
+        resultSets: {
+          Meta: { videoUrls }
+        }
+      }) => {
+        console.log('Success!')
+
+        return {
+          gameId,
+          eventId,
+          videoUrl: videoUrls.length > 0 ? videoUrls[0]['murl'] : ''
+        }
+      }
+    )
 
   return json
 }
