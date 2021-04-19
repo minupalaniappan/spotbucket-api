@@ -34,8 +34,6 @@ const fetchVideosForPlays = async actions => {
 }
 
 const fetchVideoForPlay = async (gameId, eventId) => {
-  console.log(gameId, eventId)
-
   const json = await axios({
     method: 'get',
     url: `https://stats.nba.com/stats/videoeventsasset?GameID=${gameId}&GameEventID=${eventId}`,
@@ -51,8 +49,6 @@ const fetchVideoForPlay = async (gameId, eventId) => {
           }
         }
       }) => {
-        console.log('Success', data)
-
         return {
           gameId,
           eventId,
@@ -61,8 +57,6 @@ const fetchVideoForPlay = async (gameId, eventId) => {
       }
     )
     .catch(error => console.error(error))
-
-  console.log('Hit')
 
   return json
 }
