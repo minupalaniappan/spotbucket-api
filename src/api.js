@@ -1,4 +1,5 @@
 const fetch = require('node-fetch')
+const axios = require('axios')
 const players = require('./players')
 const cheerio = require('cheerio')
 const exec = require('child_process').exec
@@ -33,23 +34,19 @@ const fetchVideosForPlays = async actions => {
 }
 
 const fetchVideoForPlay = async (gameId, eventId) => {
-  const json = await fetch(
-    `https://stats.nba.com/stats/videoeventsasset?GameEventID=${eventId}&GameID=${gameId}`,
-    {
-      headers: {
-        Connection: 'keep-alive',
-        'Cache-Control': 'no-cache',
-        Accept: 'application/json, text/plain, */*',
-        Referer: 'https://www.nba.com/'
-      }
+  const json = await axios({
+    method: 'get',
+    url: `https://stats.nba.com/stats/videoeventsasset?GameID=${gameId}&GameEventID=${eventId}`,
+    headers: {
+      Referer: 'https://www.nba.com/'
     }
-  )
-    .then(d => d.json())
-    .then(({ resultSets: { Meta: { videoUrls } } }) => ({
+  })
+    .then(({ data: { resultSets: { Meta: { videoUrls } } } }) => ({
       gameId,
       eventId,
       videoUrl: videoUrls.length > 0 ? videoUrls[0]['murl'] : ''
     }))
+    .catch(error => console.error(error))
 
   return json
 }
