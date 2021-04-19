@@ -1,4 +1,4 @@
-const fetch = require('node-fetch')
+const axios = require('axios')
 const players = require('./players')
 const last = require('lodash/last')
 const zipObject = require('lodash/zipObject')
@@ -6,34 +6,29 @@ const zipObject = require('lodash/zipObject')
 const fetchPlayerStats = async playerName => {
   const id = players[playerName].split('/')[4]
 
-  const data = await fetch(
-    `https://stats.nba.com/stats/playerprofilev2?PlayerID=${id}&PerMode=PerGame`,
-    {
-      headers: {
-        Connection: 'keep-alive',
-        Pragma: 'no-cache',
-        'Cache-Control': 'no-cache',
-        Accept: 'application/json, text/plain, */*',
-        'x-nba-stats-token': 'true',
-        'User-Agent':
-          'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_1_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.96 Safari/537.36',
-        'x-nba-stats-origin': 'stats',
-        Origin: 'https://www.nba.com',
-        'Sec-Fetch-Site': 'same-site',
-        'Sec-Fetch-Mode': 'cors',
-        'Sec-Fetch-Dest': 'empty',
-        Referer: 'https://www.nba.com/',
-        'Accept-Language': 'en-US,en;q=0.9'
-      }
+  const data = await axios({
+    method: 'get',
+    url: `https://stats.nba.com/stats/playerprofilev2?PlayerID=${id}&PerMode=PerGame`,
+    headers: {
+      Host: 'stats.nba.com',
+      'User-Agent':
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:72.0) Gecko/20100101 Firefox/72.0',
+      Accept: 'application/json, text/plain, */*',
+      'Accept-Language': 'en-US,en;q=0.5',
+      'Accept-Encoding': 'gzip, deflate, br',
+      'x-nba-stats-origin': 'stats',
+      'x-nba-stats-token': 'true',
+      Connection: 'keep-alive',
+      Referer: 'https://stats.nba.com/',
+      Pragma: 'no-cache',
+      'Cache-Control': 'no-cache'
     }
-  )
-    .then(d => d.json())
-    .then(({ resultSets }) => {
-      const { headers, rowSet } = resultSets[0]
-      const vals = last(rowSet)
+  }).then(({ data: { resultSets } }) => {
+    const { headers, rowSet } = resultSets[0]
+    const vals = last(rowSet)
 
-      return zipObject(headers, vals)
-    })
+    return zipObject(headers, vals)
+  })
 
   return data
 }

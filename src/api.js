@@ -2,7 +2,6 @@ const fetch = require('node-fetch')
 const axios = require('axios')
 const players = require('./players')
 const cheerio = require('cheerio')
-const exec = require('child_process').exec
 
 const fetchPlayerProfile = async playerName => {
   const html = await fetch(players[playerName])
@@ -38,7 +37,18 @@ const fetchVideoForPlay = async (gameId, eventId) => {
     method: 'get',
     url: `https://stats.nba.com/stats/videoeventsasset?GameID=${gameId}&GameEventID=${eventId}`,
     headers: {
-      Referer: 'https://www.nba.com/'
+      Host: 'stats.nba.com',
+      'User-Agent':
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:72.0) Gecko/20100101 Firefox/72.0',
+      Accept: 'application/json, text/plain, */*',
+      'Accept-Language': 'en-US,en;q=0.5',
+      'Accept-Encoding': 'gzip, deflate, br',
+      'x-nba-stats-origin': 'stats',
+      'x-nba-stats-token': 'true',
+      Connection: 'keep-alive',
+      Referer: 'https://stats.nba.com/',
+      Pragma: 'no-cache',
+      'Cache-Control': 'no-cache'
     }
   })
     .then(
