@@ -54,7 +54,10 @@ const fetchVideoForPlay = async (gameId, eventId) => {
       }
     }
   )
-    .then(d => d.json())
+    .then(d => {
+      console.log(d.status)
+      return d.json()
+    })
     .then(
       ({
         resultSets: {
