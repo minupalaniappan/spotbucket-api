@@ -48,11 +48,6 @@ const fetchVideoForPlay = async (gameId, eventId) => {
         'User-Agent':
           'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_2_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.128 Safari/537.36',
         'x-nba-stats-origin': 'stats',
-        Origin: 'https://www.nba.com',
-        'Sec-Fetch-Site': 'same-site',
-        'Sec-Fetch-Mode': 'cors',
-        'Sec-Fetch-Dest': 'empty',
-        Referer: 'https://www.nba.com/',
         'Accept-Language': 'en-US,en;q=0.9'
       }
     }
