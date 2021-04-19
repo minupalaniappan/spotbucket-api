@@ -33,47 +33,23 @@ const fetchVideosForPlays = async actions => {
 }
 
 const fetchVideoForPlay = async (gameId, eventId) => {
-  console.log(`Starting for ${gameId} ${eventId}`)
-
   const json = await fetch(
     `https://stats.nba.com/stats/videoeventsasset?GameEventID=${eventId}&GameID=${gameId}`,
     {
       headers: {
         Connection: 'keep-alive',
-        Pragma: 'no-cache',
         'Cache-Control': 'no-cache',
-        'sec-ch-ua':
-          '"Google Chrome";v="89", "Chromium";v="89", ";Not A Brand";v="99"',
         Accept: 'application/json, text/plain, */*',
-        'x-nba-stats-token': 'true',
-        'sec-ch-ua-mobile': '?0',
-        'User-Agent':
-          'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_2_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.128 Safari/537.36',
-        'x-nba-stats-origin': 'stats',
-        'Accept-Language': 'en-US,en;q=0.9'
+        Referer: 'https://www.nba.com/'
       }
     }
   )
-    .then(d => {
-      console.log(d.status)
-      return d.json()
-    })
-    .then(
-      ({
-        resultSets: {
-          Meta: { videoUrls }
-        }
-      }) => {
-        console.log('Success!')
-
-        return {
-          gameId,
-          eventId,
-          videoUrl: videoUrls.length > 0 ? videoUrls[0]['murl'] : ''
-        }
-      }
-    )
-    .catch(console.error)
+    .then(d => d.json())
+    .then(({ resultSets: { Meta: { videoUrls } } }) => ({
+      gameId,
+      eventId,
+      videoUrl: videoUrls.length > 0 ? videoUrls[0]['murl'] : ''
+    }))
 
   return json
 }
