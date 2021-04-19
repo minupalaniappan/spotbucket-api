@@ -70,6 +70,7 @@ const fetchVideoForPlay = async (gameId, eventId) => {
         }
       }
     )
+    .catch(console.error)
 
   return json
 }
