@@ -18,15 +18,22 @@ const run = async (playerName, params) => {
   const { game, perPage, page } = params
 
   const playerProfile = await fetchPlayerProfile(playerName)
+  console.log(playerProfile)
   const playerBio = parsePlayerBio(playerProfile)
+  console.log(playerBio)
 
   const lastGame = parsePlayerLastGame(playerProfile, game)
-
+  console.log(lastGame)
   const playByPlaysForGame = await fetchPlayByPlayForGames(lastGame)
+  console.log(playByPlaysForGame)
 
   let totalPlays = parsePlayerPlaysForGame(playByPlaysForGame, playerName)
 
+  console.log(totalPlays)
+
   const pagedPlays = arrayPaginate(totalPlays, page, perPage)
+
+  console.log(pagedPlays)
 
   const plays = await fetchVideosForPlays(pagedPlays.docs)
 
