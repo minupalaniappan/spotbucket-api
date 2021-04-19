@@ -34,6 +34,8 @@ const fetchVideosForPlays = async actions => {
 }
 
 const fetchVideoForPlay = async (gameId, eventId) => {
+  console.log(gameId, eventId)
+
   const json = await axios({
     method: 'get',
     url: `https://stats.nba.com/stats/videoeventsasset?GameID=${gameId}&GameEventID=${eventId}`,
@@ -41,12 +43,26 @@ const fetchVideoForPlay = async (gameId, eventId) => {
       Referer: 'https://www.nba.com/'
     }
   })
-    .then(({ data: { resultSets: { Meta: { videoUrls } } } }) => ({
-      gameId,
-      eventId,
-      videoUrl: videoUrls.length > 0 ? videoUrls[0]['murl'] : ''
-    }))
+    .then(
+      ({
+        data: {
+          resultSets: {
+            Meta: { videoUrls }
+          }
+        }
+      }) => {
+        console.log('Success', data)
+
+        return {
+          gameId,
+          eventId,
+          videoUrl: videoUrls.length > 0 ? videoUrls[0]['murl'] : ''
+        }
+      }
+    )
     .catch(error => console.error(error))
+
+  console.log('Hit')
 
   return json
 }
