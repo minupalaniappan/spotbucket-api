@@ -46,9 +46,13 @@ app.get('/', async (req, res) => {
     page: parseInt(page)
   }
 
-  const payload = await run(name, params)
-
   try {
+    if (!name) {
+      throw 'Name not provided!'
+    }
+
+    const payload = await run(name, params)
+
     if (!payload) {
       res.status(400).json(payload)
     } else {
