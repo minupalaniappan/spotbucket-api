@@ -37,6 +37,8 @@ const run = async (playerName, params) => {
 
   const plays = await fetchVideosForPlays(pagedPlays.docs)
 
+  console.log(plays)
+
   const {
     image: profile_image,
     team,
