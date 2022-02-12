@@ -72,20 +72,21 @@ const fetchVideoForPlay = async (gameId, eventId) => {
 }
 
 const parsePlayerBio = html => {
+  console.log(html)
   const $ = cheerio.load(html)
 
   return {
     image: $('.PlayerImage_image__1smob.mx-auto').attr('src'),
     team_image: $('.absolute.w-16.min-w-0.mt-5 img').attr('src'),
-    team: $('.flex.flex-col.mb-2.text-white > p:first-child')
+    team: $('.flex.flex-col.text-white > p:first-child')
       .text()
       .split('|')[0]
       .trim(),
-    player_number: $('.flex.flex-col.mb-2.text-white > p:first-child')
+    player_number: $('.flex.flex-col.text-white > p:first-child')
       .text()
       .split('|')[1]
-      .trim()[1],
-    position: $('.flex.flex-col.mb-2.text-white > p:first-child')
+      .trim(),
+    position: $('.flex.flex-col.text-white > p:first-child')
       .text()
       .split('|')[2]
       .trim()
